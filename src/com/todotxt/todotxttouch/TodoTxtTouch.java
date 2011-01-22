@@ -42,6 +42,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -122,6 +123,15 @@ public class TodoTxtTouch extends ListActivity implements
 		getListView().setOnCreateContextMenuListener(this);
 
 		initializeTasks();
+
+		Intent intent = getIntent();
+
+		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			String query = intent.getStringExtra(SearchManager.QUERY);
+			// doMySearch(query);
+			Log.i(TAG, "Searched for " + query);
+			// @TODO Implement search results
+		}
 	}
 
 	private void initializeTasks() {

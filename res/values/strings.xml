@@ -63,4 +63,7 @@
 	<string name="delete_task_title">Delete Task</string>
 	<string name="delete_task_message">This cannot be undone. Are you sure?</string>
 	<string name="delete_task_confirm">Delete</string>
+	<!-- search -->
+	<string name="app_label">Todo.txt Touch</string>
+	<string name="search_hint">Search tasks</string>
 </resources>
