@@ -353,51 +353,14 @@ public class TodoTxtTouch extends ListActivity implements
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					final Task task = m_adapter.getItem(pos);
-					new AsyncTask<Void, Void, Boolean>() {
-						protected void onPreExecute() {
-							m_ProgressDialog = ProgressDialog.show(
-									TodoTxtTouch.this, "Marking Task Complete",
-									"Please wait...", true);
-						}
-
-						@Override
-						protected Boolean doInBackground(Void... params) {
-							try {
-								if (task.text.startsWith(TaskHelper.COMPLETED)) {
-									return true;
-								} else {
-									String format = TaskHelper.DATEFORMAT
-											.format(new Date());
-									String text = TaskHelper.COMPLETED + format
-											+ task.text;
-									Log.v(TAG,
-											"Completing task with this text: "
-													+ text);
-									return m_app.m_util.updateTask(
-											TaskHelper.NONE, text, task);
-								}
-							} catch (Exception e) {
-								Log.e(TAG, e.getMessage(), e);
-							}
-							return false;
-						}
-
-						protected void onPostExecute(Boolean result) {
-							m_ProgressDialog.dismiss();
-							if (result) {
-								Util.showToastLong(
-										TodoTxtTouch.this,
-										"Completed task "
-												+ TaskHelper.toFileFormat(task));
-							} else {
-								Util.showToastLong(
-										TodoTxtTouch.this,
-										"Could not complete task "
-												+ TaskHelper.toFileFormat(task));
-							}
-							setFilteredTasks(true);
-						}
-					}.execute();
+				/*	m_ProgressDialog = ProgressDialog.show(
+							TodoTxtTouch.this,
+							"Really Removing Complete Status",
+							"Please wait...", true); */
+					utext u2 = new utext(task,m_app);
+					new MyTask().execute(u2);
+			//		m_ProgressDialog.dismiss();
+					
 				}
 			};
 			Util.showConfirmationDialog(this, R.string.areyousure, listener);
@@ -407,12 +370,13 @@ public class TodoTxtTouch extends ListActivity implements
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					final Task task = m_adapter.getItem(pos);
+					m_ProgressDialog = ProgressDialog.show(
+							TodoTxtTouch.this,
+							"Really Removing Complete Status",
+							"Please wait...", true);
 					new AsyncTask<Void, Void, Boolean>() {
 						protected void onPreExecute() {
-							m_ProgressDialog = ProgressDialog.show(
-									TodoTxtTouch.this,
-									"Removing Complete Status",
-									"Please wait...", true);
+							
 						}
 
 						@Override
@@ -425,8 +389,9 @@ public class TodoTxtTouch extends ListActivity implements
 									Log.v(TAG,
 											"Marking as incomplete task with this text: "
 													+ text);
-									return m_app.m_util.updateTask(
-											TaskHelper.NONE, text, task);
+								//	return m_app.m_util.updateTask(
+								//			TaskHelper.NONE, text, task);
+									return true;
 								}
 							} catch (Exception e) {
 								Log.e(TAG, e.getMessage(), e);
@@ -435,7 +400,7 @@ public class TodoTxtTouch extends ListActivity implements
 						}
 
 						protected void onPostExecute(Boolean result) {
-							m_ProgressDialog.dismiss();
+						/*	m_ProgressDialog.dismiss();
 							if (result) {
 								Util.showToastLong(TodoTxtTouch.this,
 										"Task marked as not completed");
@@ -443,10 +408,12 @@ public class TodoTxtTouch extends ListActivity implements
 								Util.showToastLong(TodoTxtTouch.this,
 										"Could not mark task as not completed");
 							}
-							setFilteredTasks(true);
+							setFilteredTasks(true); */
 						}
 					}.execute();
+					m_ProgressDialog.dismiss();
 				}
+				
 			};
 			Util.showConfirmationDialog(this, R.string.areyousure, listener);
 		} else if (menuid == R.id.priority) {
@@ -867,5 +834,77 @@ public class TodoTxtTouch extends ListActivity implements
 	public void showToast(String string) {
 		Util.showToastLong(this, string);
 	}
+	private class MyTask extends AsyncTask<utext,Void,Boolean> {
 
+		protected void onPreExecute() {
+		/*	m_ProgressDialog = ProgressDialog.show(
+					TodoTxtTouch.this, "Marking Task Quite Very Complete",
+					"Please wait...", true); */
+		}
+
+		@Override
+		protected Boolean doInBackground(utext... u) {
+			Task task = u[0].getTask();
+			TodoApplication m_app = u[0].getApp();
+			try {
+				if (task.text.startsWith(TaskHelper.COMPLETED)) {
+					return true;
+				} else {
+					String format = TaskHelper.DATEFORMAT
+							.format(new Date());
+					String text = TaskHelper.COMPLETED + format
+							+ task.text;
+					Log.v(TAG,
+							"Completing task with this text: "
+									+ text);
+					return m_app.m_util.updateTask(
+							TaskHelper.NONE, text, task);
+				//	return true;
+				}
+			} catch (Exception e) {
+				Log.e(TAG, e.getMessage(), e);
+			}
+			return false;
+		}
+
+		protected void onPostExecute(Boolean result) {
+		/*	m_ProgressDialog.dismiss();
+			if (result) {
+				Util.showToastLong(
+						TodoTxtTouch.this,
+						"Marked as complete");
+			} else {
+				Util.showToastLong(
+						TodoTxtTouch.this,
+						"Could not complete task");
+			}
+			setFilteredTasks(true); */
+		}
+	
+		
+	}
+	
+	private class utext{
+		TodoApplication m_app;
+		Task task;
+		
+		public utext(Task t, TodoApplication m)
+		{
+			m_app = m;
+			task = t;
+		}
+		
+		public Task getTask()
+		{
+			return task;
+		}
+		
+		public TodoApplication getApp()
+		{
+			return m_app;
+		}
+			
+	}
 }
+
+
