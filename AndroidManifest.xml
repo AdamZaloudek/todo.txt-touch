@@ -13,6 +13,7 @@
 			android:anyDensity="true" android:resizeable="true" />
 
 		<activity android:name=".LoginScreen" android:label="@string/app_label"
+			android:configChanges="orientation|keyboardHidden"
 			android:theme="@android:style/Theme.NoTitleBar"
 			android:screenOrientation="portrait">
 			<intent-filter>
@@ -22,6 +23,7 @@
 		</activity>
 
 		<activity android:name=".Filter" android:label="Filter"
+			android:configChanges="orientation|keyboardHidden"
 			android:theme="@android:style/Theme.NoTitleBar" />
 		<activity android:name=".Preferences" android:label="@string/set_preferences" />
 		<activity android:name=".AddTask" android:label="@string/addtask"
@@ -33,7 +35,8 @@
 
 		<activity-alias android:name=".AddTaskShortcut"
 			android:targetActivity=".AddTask"
-			android:label="@string/shortcut_addtask_name">
+			android:label="@string/shortcut_addtask_name"
+			android:configChanges="orientation|keyboardHidden">
 			<intent-filter>
 				<action android:name="android.intent.action.CREATE_SHORTCUT" />
 				<category android:name="android.intent.category.DEFAULT" />
@@ -41,6 +44,7 @@
 		</activity-alias>
 		
 		<activity android:name=".TodoTxtTouch"
+			android:configChanges="orientation|keyboardHidden"
 			android:theme="@android:style/Theme.NoTitleBar">
 			<intent-filter>
 				<action android:name="android.intent.action.SEARCH" />
